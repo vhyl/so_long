@@ -24,5 +24,6 @@ int valid_path(char **map);
 void flood_fill(int x, int y, char **map);
 char **create_map(char const *str, char c);
 char *read_input(char *file_name);
+int check(char *s);
 
 #endif

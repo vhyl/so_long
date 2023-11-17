@@ -1,10 +1,10 @@
 #include "../header/so_long.h"
 
 int valid_chars(char *s)
-{
+{ 
     while (*s)
     {
-        if (*s != '0' && *s != '1' && *s != 'C' && *s != 'E' && *s != 'P')
+        if (*s != '0' && *s != '1' && *s != 'C' && *s != 'E' && *s != 'P' && *s != '\n')
             return (1); // return 1 on wrong map
         s++;
     }
@@ -55,7 +55,7 @@ int get_height(char **s)
     int x;
 
     x = 0;
-    while (s[x][0])
+    while (s[x])
         x++;
 
     return (x);
@@ -75,22 +75,21 @@ int get_lenght(char **s)
 int valid_walls(char **s)
 {
     int i;
-    int heigth;
+    int height;
     int length;
 
 
     i = 0;
-    length = get_lenght(s);
-    heigth = get_height(s);
-
+    length = get_lenght(s) - 1;
+    height = get_height(s) - 1;
     while (i < length)
     {
-        if (s[0][i] != '1' || s[heigth][i] != '1')
+        if (s[0][i] != '1' || s[height][i] != '1')
             return (1);
         i++;
     }
     i = 0;
-    while (i < heigth)
+    while (i < height)
     {
         if (s[i][0] != '1' || s[i][length] != '1')
             return (1);
@@ -105,9 +104,9 @@ void find_player(char **map, int *x, int *y)
     int j;
 
     i = 0;
-    j = 0;
     while (map[i])
     {
+        j = 0;
         while(map[i][j])
         {
             if (map[i][j] == 'P')
@@ -127,14 +126,14 @@ int valid_path(char **map)
     int x;
     int y;
     
-    if (valid_walls(map))
+    if (!valid_walls(map))
     {   
         find_player(map, &x, &y);
         flood_fill(x, y, map);
         x = 0;
-        y = 0;
         while (map[x])
         {
+            y = 0;
             while (map[x][y])
             {
                 if (map[x][y] != '1' && map[x][y] != 'x')
@@ -145,4 +144,23 @@ int valid_path(char **map)
         }
     }
     return (0);
+}
+
+int check(char *s)
+{
+    char *str;
+	char **map;
+
+	str = read_input(s);
+
+	if (!valid_map(str))
+	{
+		map = create_map(str, '\n');
+        free(str);
+		if (valid_path(map));
+            return (0);
+	}
+    else 
+        return (0);
+    return (1);
 }
