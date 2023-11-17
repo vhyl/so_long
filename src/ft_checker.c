@@ -52,21 +52,45 @@ int valid_map(char *s)
 
 int get_height(char **s)
 {
-    int x
+    int x;
+
+    x = 0;
+    while (s[x][0])
+        x++;
+
+    return (x);
 }
+
+int get_lenght(char **s)
+{
+    int y;
+
+    y = 0;
+    while (s[0][y])
+        y++;
+
+    return (y);
+}
+
 int valid_walls(char **s)
 {
     int i;
+    int heigth;
+    int length;
+
 
     i = 0;
+    length = get_lenght(s);
+    heigth = get_height(s);
+
     while (i < length)
     {
-        if (s[0][i] != '1' || s[height][i] != '1')
+        if (s[0][i] != '1' || s[heigth][i] != '1')
             return (1);
         i++;
     }
     i = 0;
-    while (i < height)
+    while (i < heigth)
     {
         if (s[i][0] != '1' || s[i][length] != '1')
             return (1);
@@ -97,10 +121,28 @@ void find_player(char **map, int *x, int *y)
         i++;
     }
 }
+
 int valid_path(char **map)
 {
-    if (valid_walls(map))
+    int x;
+    int y;
     
-    flood_fill(x, y, map);
-
+    if (valid_walls(map))
+    {   
+        find_player(map, &x, &y);
+        flood_fill(x, y, map);
+        x = 0;
+        y = 0;
+        while (map[x])
+        {
+            while (map[x][y])
+            {
+                if (map[x][y] != '1' && map[x][y] != 'x')
+                    return (1);
+                y++;
+            }
+            x++;
+        }
+    }
+    return (0);
 }
